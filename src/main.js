@@ -9,8 +9,11 @@ const savedState = JSON.parse(localStorage.getItem('piniaState'))
 // 创建 Pinia store 实例
 const pinia = createPinia()
 
-// 设置初始状态为读取的保存状态数据
-pinia.state.value = savedState
+if (savedState) {
+    // 设置初始状态为读取的保存状态数据
+    pinia.state.value = savedState
+}
+
 
 const app = createApp(App)
 
