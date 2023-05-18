@@ -48,7 +48,6 @@ const onAdd = () => {
 const ondelete = (id) => {
   store.delete(id);
 };
-
 </script>
 <style lang="less" scoped>
 .to-do-list {
@@ -63,12 +62,15 @@ const ondelete = (id) => {
     margin: 0;
     padding: 0;
     li {
+      position: sticky;
+      top: 0;
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 10px;
       font-size: 14px;
       border-bottom: 1px solid #cccccc48;
+      background-color: #fff;
       > .left {
         width: calc(100% - 60px);
 
