@@ -1,4 +1,4 @@
 
 # Vue 3 + Vite + Pinia
 
-实现 todolist demo
+尝试使用 Pinia 来实现 todolist
