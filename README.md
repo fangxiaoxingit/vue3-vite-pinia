@@ -1,5 +1,4 @@
-# vue3-vite-pinia
-vue3+vite+pinia
-# Vue 3 + Vite + pinia
+
+# Vue 3 + Vite + Pinia
 
 实现 todolist demo
