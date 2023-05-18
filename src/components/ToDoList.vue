@@ -3,16 +3,38 @@
 <template>
   <div class="to-do-list">
     <h2>To Do List</h2>
-    <ul v-if="dataList.length">
-      <li v-for="(item, i) in dataList" :key="i">
-        <div class="left">{{ i + 1 }}.{{ item.dose }}</div>
-        <div class="right">
-          <i @click="ondelete(item.id)" title="点击删除">删除</i>
-        </div>
-      </li>
-    </ul>
-    <h3 v-else>还没有代办事项，在下方添加</h3>
-    <div class="add-line">
+    <div class="tab-list">
+      <div @click="onTab(1)" :class="['item', curTab == 1 ? 'active' : '']">
+        未完成{{ `（${unDoList.length}）` }}
+      </div>
+      <div @click="onTab(2)" :class="['item', curTab == 2 ? 'active' : '']">
+        已完成{{ `（${doneList.length}）` }}
+      </div>
+    </div>
+    <template v-if="curTab == 1">
+      <ul v-if="unDoList.length">
+        <li v-for="(item, i) in unDoList" :key="item.id">
+          <div class="left">{{ i + 1 }}.{{ item.do }}</div>
+          <div class="right">
+            <label @click="onUpdata(item.id)">
+              <input type="checkbox" name="完成" />
+            </label>
+            <i @click="onDelete(item.id)" title="点击删除">删除</i>
+          </div>
+        </li>
+      </ul>
+      <h3 v-else>还没有代办事项，在下方添加</h3>
+    </template>
+    <template v-else>
+      <ul v-if="doneList.length">
+        <li v-for="(item, i) in doneList" :key="item.id">
+          <div class="left through">{{ i + 1 }}.{{ item.do }}</div>
+        </li>
+      </ul>
+      <h3 v-else>暂无已完成事项</h3>
+    </template>
+
+    <div v-if="curTab == 1" class="add-line">
       <input
         v-model="newItem"
         @keydown.enter="onAdd"
@@ -24,7 +46,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useDataListStore } from "./../store/toDoList";
 
 const newItem = ref("");
@@ -33,20 +55,39 @@ const store = useDataListStore();
 console.log(store, "store");
 
 const dataList = computed(() => store.dataList);
+const unDoList = ref(dataList.value.filter((v) => !v.done));
+const doneList = ref(dataList.value.filter((v) => v.done));
 
+// 需要注意的是，由于 dataList 是一个计算属性，它本身不是一个响应式数据。因此，在 watch 函数中监听 dataList 时，实际上是监听了 dataList.value
+watch(dataList.value, (newValue) => {
+  console.log(dataList.value, "dataList");
+  unDoList.value = dataList.value.filter((v) => !v.done);
+  doneList.value = dataList.value.filter((v) => v.done);
+});
+
+const curTab = ref(1);
+
+const onTab = (type) => {
+  curTab.value = type;
+};
 //添加
 const onAdd = () => {
   if (!newItem.value) {
     alert("请输入添加事项");
     return;
   }
-  store.add({ id: new Date().getTime(), dose: newItem.value });
+  store.add({ id: new Date().getTime(), do: newItem.value, done: false });
   newItem.value = "";
   window.scrollTo(0, document.body.scrollHeight);
 };
 // 删除
-const ondelete = (id) => {
+const onDelete = (id) => {
   store.delete(id);
+};
+const onUpdata = (id) => {
+  setTimeout(() => {
+    store.updata(id);
+  },200)
 };
 </script>
 <style lang="less" scoped>
@@ -58,12 +99,41 @@ const ondelete = (id) => {
     top: 0;
     background-color: #fff;
   }
+  > .tab-list {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 1px solid #cccccc6b;
+    position: sticky;
+    top: 60px;
+    background-color: #fff;
+    > .item {
+      width: 50%;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+    > .active {
+      position: relative;
+      // border-top: 3px solid rgb(7, 156, 107);
+    }
+    > .active::before {
+      position: absolute;
+      content: "";
+      left: 50%;
+      top: 5px;
+      transform: translateX(-20px);
+      width: 40px;
+      height: 2px;
+      border-radius: 2px;
+      background-color: rgb(7, 156, 107);
+    }
+  }
   > ul {
     margin: 0;
     padding: 0;
     li {
       position: sticky;
-      top: 0;
+      top: 90px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -72,23 +142,29 @@ const ondelete = (id) => {
       border-bottom: 1px solid #cccccc48;
       background-color: #fff;
       > .left {
-        width: calc(100% - 60px);
+        width: calc(100% - 120px);
 
         text-align: left;
         word-break: break-all;
         letter-spacing: 1px;
       }
+      >.through{
+        text-decoration: line-through;
+        color: #797979;
+      }
       > .right {
-        width: 50px;
+        width: 120px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        // opacity: 0;
+        > label {
+        }
         > i {
           color: rgb(240, 131, 131);
           cursor: pointer;
         }
       }
-    }
-    li:hover {
-      transition: all 500ms ease-in-out;
-      border-bottom: 1px solid rgb(1, 148, 99);
     }
   }
   h3 {

@@ -12,6 +12,10 @@ export const useDataListStore = defineStore('list', {
         },
         delete(value) {
             this.dataList = this.dataList.filter(item => item.id !== value)
+        },
+        updata(value) {
+            let index = this.dataList.findIndex(item => item.id == value)
+            this.dataList[index].done = true
         }
     },
 })
