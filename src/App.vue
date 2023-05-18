@@ -18,7 +18,7 @@ import ToDoList from './components/ToDoList.vue';
 
 <style scoped>
 .logo {
-  height: 3em;
+  height: 6em;
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
