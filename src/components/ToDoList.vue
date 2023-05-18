@@ -42,16 +42,23 @@ const onAdd = () => {
   }
   store.add({ id: new Date().getTime(), dose: newItem.value });
   newItem.value = "";
+  window.scrollTo(0, document.body.scrollHeight);
 };
 // 删除
 const ondelete = (id) => {
   store.delete(id);
 };
+
 </script>
 <style lang="less" scoped>
 .to-do-list {
   width: 500px;
   margin: 0 auto;
+  > h2 {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+  }
   > ul {
     margin: 0;
     padding: 0;
@@ -87,6 +94,8 @@ const ondelete = (id) => {
   }
   > .add-line {
     width: 100%;
+    position: sticky;
+    bottom: 0;
     > input {
       width: 100%;
       padding: 20px 10px;

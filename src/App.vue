@@ -17,6 +17,11 @@ import ToDoList from './components/ToDoList.vue';
 </template>
 
 <style scoped>
+div{
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+}
 .logo {
   height: 6em;
   padding: 1.5em;
