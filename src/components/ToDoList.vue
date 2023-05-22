@@ -29,6 +29,9 @@
       <ul v-if="doneList.length">
         <li v-for="(item, i) in doneList" :key="item.id">
           <div class="left through">{{ i + 1 }}.{{ item.do }}</div>
+          <div class="right">
+            <i @click="onDelete(item.id)" title="点击删除">删除</i>
+          </div>
         </li>
       </ul>
       <h3 v-else>暂无已完成事项</h3>
@@ -82,12 +85,13 @@ const onAdd = () => {
 };
 // 删除
 const onDelete = (id) => {
+  console.log(id);
   store.delete(id);
 };
 const onUpdata = (id) => {
   setTimeout(() => {
     store.updata(id);
-  },200)
+  }, 200);
 };
 </script>
 <style lang="less" scoped>
@@ -148,7 +152,7 @@ const onUpdata = (id) => {
         word-break: break-all;
         letter-spacing: 1px;
       }
-      >.through{
+      > .through {
         text-decoration: line-through;
         color: #797979;
       }
