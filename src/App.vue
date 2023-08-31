@@ -14,8 +14,8 @@ import ToDoListTailwind from './components/ToDoListTailwind.vue';
     </a> -->
   </div>
   <!-- <HelloWorld msg="Vite + Vue" /> -->
-  <!-- <ToDoList /> -->
-  <ToDoListTailwind />
+  <ToDoList />
+  <!-- <ToDoListTailwind /> -->
 </template>
 
 <style scoped>
